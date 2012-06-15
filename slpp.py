@@ -180,31 +180,13 @@ class SLPP:
 
     def number(self):
         n = ''
-        flt = False
-        if self.ch == '-':
-            n = '-'
-            self.next_chr()
-            if not self.ch or not self.ch.isdigit():
-                print "Malformed number %s(no digits after initial minus)" % self.ch
-                return 0
-        while self.ch and self.ch.isdigit():
+        while self.ch and (self.ch in ['e', 'E', '-', '+', '.'] or self.ch.isdigit()):
             n += self.ch
             self.next_chr()
-        if self.ch and self.ch == '.':
-            n += self.ch
-            flt = True
-            self.next_chr()
-            if not self.ch or not self.ch.isdigit():
-                print "Malformed number %s (no digits after decimal point)" % self.ch
-                return n+'0'
-            else:
-                n += self.ch
-            while self.ch and self.ch.isdigit():
-                n += self.ch
-                self.next_chr()
-        if flt:
+        try:
+            return int(n)
+        except:
             return float(n)
-        return int(n)
 
 slpp = SLPP()
 
