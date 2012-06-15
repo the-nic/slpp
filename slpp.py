@@ -106,23 +106,22 @@ class SLPP:
         s = ''
         tab = self.tab
         newline = self.newline
-        tp = type(obj)
-        if tp is str:
+        if isinstance(obj, str):
             s += '"%s"' % obj
-        elif tp in [int, float, long, complex]:
+        elif isinstance(obj, (int, float, long, complex)):
             s += str(obj)
-        elif tp is bool:
+        elif isinstance(obj, bool):
             s += str(obj).lower()
-        elif tp in [list, tuple, dict, odict]:
+        elif isinstance(obj, (list, tuple, dict)):
             self.depth += 1
-            if len(obj) == 0 or ( tp is not dict and tp is not odict and len(filter( 
-                    lambda x:  type(x) in (int,  float,  long) \
-                    or (type(x) is str and len(x) < 10),  obj
+            if len(obj) == 0 or ( not isinstance(obj, dict) and len(filter( 
+                    lambda x: isinstance(x, (int, float, long)) \
+                    or (isinstance(x, str) and len(x) < 10),  obj
                 )) == len(obj) ):
                 newline = tab = ''
-            dp = tab * self.depth            
+            dp = tab * self.depth
             s += "%s{%s" % (tab * (self.depth - 2), newline)
-            if tp is dict or tp is odict:
+            if isinstance(obj, dict):
                 s += (',%s' % newline).join(
                     [self.__encode(v) if type(k) is int \
                         else dp + '%s = %s' % (k, self.__encode(v)) \
